@@ -26,7 +26,7 @@ def rstrip_until_max_width(text, max_w):
     real_w = width_str(text)
     if real_w > max_w:
         over_w = real_w - max_w
-        while over_w != 0:
+        while over_w > 0:
             over_w -= width_str(text[-1])
             text = text[:-1]
     
