@@ -13,6 +13,22 @@ def read_urls_info(file_path='YT_urls.txt'):
     return urls, titles
 
 
+def save_text_list(file_path, text_list):
+    skip_num = 0
+
+    with open(file_path, 'a', encoding="utf-8") as f: 
+        for text in text_list:
+            text = text.replace('\n', ' ')
+            if len(text)==0: 
+                skip_num += 1
+            else:
+                f.write(text + '\n')
+
+    n_comment_saved = len(text_list) - skip_num
+
+    return n_comment_saved
+
+
 def save_image(img_url: str, file_path: str):
     with open(file_path, 'wb') as f: # w: write, b: binary
         byte = urlopen(img_url).read()

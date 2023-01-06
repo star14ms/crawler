@@ -1,8 +1,8 @@
 import sys, os
 import time, datetime
 
-from .webdriver import pause_video, scroll_down, save_text_list
-from .utils import pad_spaces
+from .webdriver import pause_video, scroll_down
+from .utils import pad_spaces, save_text_list
 
 
 def crawl_youtube_comments(driver, urls, titles, comment_block, save_path=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
