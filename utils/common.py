@@ -2,17 +2,6 @@ from urllib.request import urlopen
 import time
 
 
-def read_urls_info(file_path='YT_urls.txt'):
-    with open(file_path, 'r') as f:
-        lines = f.readlines()
-        urls = [line.split('\t')[0] for line in lines]
-        titles = [line.split('\t')[1] for line in lines]
-
-    print('\n읽은 동영상 갯수: %d개'% len(urls))
-
-    return urls, titles
-
-
 def save_text_list(file_path, text_list):
     skip_num = 0
 
