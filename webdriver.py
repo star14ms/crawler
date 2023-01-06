@@ -45,10 +45,10 @@ def scroll_down(driver, n_scroll_down=500, start_time=None, finish_text="완료"
     sys.stdout.flush()
 
 
-def save_text_list(file_name, text_list):
+def save_text_list(file_path, text_list):
     skip_num = 0
 
-    with open(f'{file_name}.txt', 'a', encoding="utf-8") as f: 
+    with open(file_path, 'a', encoding="utf-8") as f: 
         for text in text_list:
             text = text.replace('\n', ' ')
             if len(text)==0: 

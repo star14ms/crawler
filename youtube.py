@@ -5,22 +5,23 @@ from .webdriver import pause_video, scroll_down, save_text_list
 from .utils import pad_spaces
 
 
-def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
+def crawl_youtube_comments(driver, urls, titles, comment_block, save_path=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
     """링크에 하나씩 들어가 유튜브 댓글 크롤링하기"""
 
     print("0 | 댓글 수 | 동영상 제목")
 
     # 저장할 데이터 파일 이름 설정 (댓글, 동영상 링크 저장)
-    if save_name is None:
+    if save_path is None:
         os.makedirs('./data/', exist_ok=True)
         day = datetime.date.today().strftime('%y%m%d')
-        save_name = f'data/YT_cmts_{day}'
-    save_name_urls = save_name + '_urls'
+        save_path = f'data/YT_cmts_{day}.txt'
+    urls_save_path = save_path[:save_path.rfind('.')] + '_urls.txt'
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
     # urls 파일이 존재하면 그 안의 url들은 제외하고 댓글 수집
     cmts_already_saved_urls = None
-    if save_name_urls!=None and os.path.isfile(f'{save_name_urls}.txt'):
-        with open(f'{save_name_urls}.txt', 'r', encoding="utf-8") as f:
+    if os.path.isfile(urls_save_path):
+        with open(urls_save_path, 'r', encoding="utf-8") as f:
             cmts_already_saved_urls = [url_info.split('\t')[0] for url_info in f.read().splitlines()]
     
     saved_cmts_num = 0
@@ -51,10 +52,10 @@ def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, 
 
         # txt파일로 댓글 저장
         comments = list(map(lambda cmt: cmt.text, comment_blocks))
-        n_comment_saved = save_text_list(save_name, comments)
+        n_comment_saved = save_text_list(save_path, comments)
 
         # 댓글 수집한 동영상 목록에 현재 url추가
-        with open(f'{save_name_urls}.txt', 'a', encoding="utf-8") as f:
+        with open(urls_save_path, 'a', encoding="utf-8") as f:
             f.write(url+'\t'+titles[i]+'\n')
 
         saved_cmts_num += n_comment_saved

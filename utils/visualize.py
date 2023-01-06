@@ -1,6 +1,7 @@
 from nltk import Text
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import os
 
 
 def show_image(image, axis='off', cmap=None, size=5):
@@ -43,6 +44,8 @@ def plot_frequency_chart(words: Text, top_n=30, size=16, save_path='result/YT_co
     plt.xlabel('단어')
     plt.ylabel('출현 수 (개)')
     plt.xticks(rotation=60)
+    
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path)
     plt.show()
 
@@ -54,5 +57,7 @@ def draw_word_cloud(words: Text, font_path='./crawler/source/font/주아체.ttf'
     plt.figure(figsize = (size, size))
     plt.imshow(wc.generate_from_frequencies(words.vocab()))
     plt.axis("off")
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path)
     plt.show()
