@@ -18,29 +18,29 @@ def print_html(soup):
 RE_ANSI = re.compile(r"\x1b\[[;\d]*[A-Za-z]")
 
 
-def len_str(text):
+def width_str(text):
     return sum(2 if east_asian_width(ch) in 'FW' else 1 for ch in str(text))
 
 
-def rstrip_until_endline(text, len, max_len):
-    if len > max_len:
-        over_len = len - max_len
-        idx = -1
-        while len_str(text[idx:]) < over_len:
-            idx -= 1
-        text = text[:idx]
+def rstrip_until_max_width(text, max_w):
+    real_w = width_str(text)
+    if real_w > max_w:
+        over_w = real_w - max_w
+        while over_w != 0:
+            over_w -= width_str(text[-1])
+            text = text[:-1]
     
     return text
 
 
-def add_spaces_until_endline(text: str = "", shortening_end='..', align_right_side: bool = False):
+def pad_spaces(text: str = "", console_width: int = 150, ellipsis_text: str = '..', align_right_side: bool = False):
     text = RE_ANSI.sub('', text)
-    max_len = 150 + 1 - len_str(shortening_end)
+    max_width = console_width + 1 - width_str(ellipsis_text)
     
-    text2 = rstrip_until_endline(text, len_str(text), max_len)
-    if shortening_end and text!=text2: 
-        text2 = text2 + shortening_end
+    text2 = rstrip_until_max_width(text, width_str(text), max_width)
+    if ellipsis_text and text!=text2: 
+        text2 = text2 + ellipsis_text
 
     del_len = sum(1 if east_asian_width(ch) in 'FW' else 0 for ch in str(text2))
 
-    return text2.ljust(max_len - del_len) if not align_right_side else text2.rjust(max_len - del_len)
+    return text2.ljust(max_width - del_len) if not align_right_side else text2.rjust(max_width - del_len)

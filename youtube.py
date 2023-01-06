@@ -5,8 +5,8 @@ from webdriver import pause_video, scroll_down, save_text_list
 from utils.print import add_spaces_until_endline as add_spaces
 
 
-def get_youtube_comments(driver, urls, titles, comment_block, save_name=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
-    """링크에 하나씩 들어가서 유튜브 댓글 수집하기"""
+def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
+    """링크에 하나씩 들어가 유튜브 댓글 크롤링하기"""
 
     print("0 | 댓글 수 | 동영상 제목")
 
