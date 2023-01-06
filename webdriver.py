@@ -31,7 +31,7 @@ def scroll_down(driver, n_scroll_down=500, start_time=None, finish_text="완료"
 
     for n in range(1, n_scroll_down+1):
         sys.stdout.write('\r스크롤 내리기 %d / %d' % (n, n_scroll_down) + \
-            '' if start_time is None else ' (%s)' % Time.str_delta(start_time)
+            ('' if start_time is None else ' (%s)' % Time.str_delta(start_time))
         )
         sys.stdout.flush()
 
@@ -40,7 +40,7 @@ def scroll_down(driver, n_scroll_down=500, start_time=None, finish_text="완료"
         time.sleep(waiting_time)
 
     sys.stdout.write('\r%s %d / %d' % (finish_text, n, n) + \
-        '' if start_time is None else ' (%s)' % Time.str_delta(start_time)
+        ('' if start_time is None else ' (%s)' % Time.str_delta(start_time))
     )
     sys.stdout.flush()
 
