@@ -56,7 +56,7 @@ def crawl_youtube_comments(driver, urls, titles, comment_block, save_path=None, 
 
         # 댓글 수집한 동영상 목록에 현재 url추가
         with open(urls_save_path, 'a', encoding="utf-8") as f:
-            f.write(url+'\t'+titles[i]+'\n')
+            f.write(url+'\t'+titles[i])
 
         saved_cmts_num += n_comment_saved
     
