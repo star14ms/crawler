@@ -20,6 +20,9 @@ def save_image(img_url: str, file_path: str):
 
 
 class Time:
+    def now():
+        return time.perf_counter()
+
     def sec_to_hms(second):
             second = int(second)
             h, m, s = (second // 3600), (second//60 - second//3600*60), (second % 60)

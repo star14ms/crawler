@@ -25,7 +25,7 @@ def pause_video(driver):
     time.sleep(0.5)
 
 
-def scroll_down(driver, n_scroll_down=500, waiting_time=0.1, start_time=None, finish_text="완료"):
+def scroll_down(driver, n_scroll_down=500, start_time=None, finish_text="완료", waiting_time=0.1):
     """스크롤 내리기 반복"""
     body = driver.find_element('tag name', 'body')
 
