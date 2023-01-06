@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import sys
 import time
-from utils.common import Time
+from .utils import Time
 
 
 def get_chrome_driver(executable_path='chromedriver'):

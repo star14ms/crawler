@@ -1,8 +1,8 @@
 import sys, os
 import time, datetime
 
-from webdriver import pause_video, scroll_down, save_text_list
-from utils.print import add_spaces_until_endline as add_spaces
+from .webdriver import pause_video, scroll_down, save_text_list
+from .utils import pad_spaces
 
 
 def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
@@ -28,7 +28,7 @@ def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, 
         
         # 댓글 수집한 동영상 목록에 있던 url이면 건너뛰기
         if cmts_already_saved_urls!=None and url in cmts_already_saved_urls:
-            sys.stdout.write(add_spaces("\r{0} | 완료 | {1}".format(i+1, titles[i])))
+            sys.stdout.write(pad_spaces("\r{0} | 완료 | {1}".format(i+1, titles[i])))
             sys.stdout.flush()
             continue
 
@@ -45,7 +45,7 @@ def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, 
         comment_blocks = driver.find_elements(*comment_block)
     
         if len(comment_blocks) < skip_video_until_n_comment:
-            sys.stdout.write(add_spaces("\r{0} | 스킵 | {1}".format(i+1, titles[i])))
+            sys.stdout.write(pad_spaces("\r{0} | 스킵 | {1}".format(i+1, titles[i])))
             sys.stdout.flush()
             continue
 
@@ -59,7 +59,7 @@ def crawl_youtube_comments(driver, urls, titles, comment_block, save_name=None, 
 
         saved_cmts_num += n_comment_saved
     
-        sys.stdout.write(add_spaces("\r{0} | {1}개 | {2}".format(i+1, len(comments), titles[i])))
+        sys.stdout.write(pad_spaces("\r{0} | {1}개 | {2}".format(i+1, len(comments), titles[i])))
         sys.stdout.flush()
     
     print('\n수집한 댓글 수: %d개'% saved_cmts_num)
