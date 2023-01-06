@@ -36,8 +36,8 @@ def rstrip_until_max_width(text, max_w):
 def pad_spaces(text: str = "", console_width: int = 150, ellipsis_text: str = '..', align_right_side: bool = False):
     text = RE_ANSI.sub('', text)
     max_width = console_width + 1 - width_str(ellipsis_text)
-    
-    text2 = rstrip_until_max_width(text, width_str(text), max_width)
+
+    text2 = rstrip_until_max_width(text, max_width)
     if ellipsis_text and text!=text2: 
         text2 = text2 + ellipsis_text
 
