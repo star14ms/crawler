@@ -76,16 +76,14 @@ def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=Non
             comment_blocks = [] # 시간 단축을 위해 댓글이 없는 경우 바로 빈 리스트 반환
         else:
             comment_blocks = driver.find_elements(*parse_selector(selector_comment))
-    
+        
         if len(comment_blocks) < skip_video_until_n_comment:
             sys.stdout.write(pad_spaces("\r{0} | 스킵 | {1}".format(i+1, titles[i]))+'\n')
             sys.stdout.flush()
             continue
 
-        # txt파일로 댓글 저장
         comments = list(map(lambda cmt: cmt.text, comment_blocks))
-        
-        # Limit comments to max_comments_per_video to prevent exceeding the limit
+        comments = [c for c in comments if c.replace('\n', ' ').strip()] # 빈 댓글 제거
         if len(comments) > max_comments_per_video:
             comments = comments[:max_comments_per_video]
 

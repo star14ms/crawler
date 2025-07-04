@@ -3,19 +3,11 @@ import time
 
 
 def save_text_list(file_path, text_list):
-    skip_num = 0
-
     with open(file_path, 'a', encoding="utf-8") as f: 
         for text in text_list:
             text = text.replace('\n', ' ')
-            if len(text)==0: 
-                skip_num += 1
-            else:
-                f.write(text + '\n')
-
-    n_comment_saved = len(text_list) - skip_num
-
-    return n_comment_saved
+            f.write(text + '\n')
+    return len(text_list)
 
 
 def save_image(img_url: str, file_path: str):
