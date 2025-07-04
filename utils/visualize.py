@@ -29,7 +29,7 @@ def show_images(*images, axis='off', cmap=None, size=25):
     plt.show()
 
 
-def plot_frequency_chart(words: Text, top_n=30, size=16, save_path='result/YT_comments_graph.jpg'):
+def plot_frequency_chart(words: Text, top_n=30, size=16, save_path='output/YT_comments_graph.jpg'):
     """데이터의 단어 빈도 수 그래프 그리기"""
 
     samples = [item for item, _ in words.vocab().most_common(top_n)]
@@ -50,7 +50,7 @@ def plot_frequency_chart(words: Text, top_n=30, size=16, save_path='result/YT_co
     plt.show()
 
 
-def draw_word_cloud(words: Text, font_path='./crawler/source/font/주아체.ttf', width=1000, height=600, background_color="white", size=20, save_path='result/YT_comments_wordcloud.jpg'):
+def draw_word_cloud(words: Text, font_path='./crawler/source/font/주아체.ttf', width=1000, height=600, background_color="white", size=20, save_path='output/YT_comments_wordcloud.jpg'):
     """학습 데이터의 단어들로 word_cloud 그리기"""
 
     wc = WordCloud(width=width, height=height, background_color=background_color, font_path=font_path)
