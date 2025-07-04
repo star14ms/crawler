@@ -1,8 +1,9 @@
-import sys, os
+import sys
+import os
 import time, datetime
 
-from webdriver import pause_video, scroll_down, parse_selector
-from utils import pad_spaces, save_text_list
+from .webdriver import pause_video, scroll_down, parse_selector
+from .utils import pad_spaces, save_text_list
 
 
 def get_video_titles_URLs(driver, selector_video_block, URL):

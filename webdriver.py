@@ -1,10 +1,11 @@
+import sys
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import sys
-import time
-from utils import Time
-from utils.print import pad_spaces
+
+from .utils import Time
+from .utils.print import pad_spaces
 
 
 def get_chrome_driver(headless=True):
@@ -44,7 +45,7 @@ def scroll_down(driver, start_time=None, finish_text="완료", waiting_time=0.1,
     n = 0
 
     # Initial scroll to trigger comment loading
-    for _ in range(5):
+    for _ in range(10):
         body.send_keys(Keys.END)
         driver.implicitly_wait(10)
     time.sleep(no_change_timeout)
