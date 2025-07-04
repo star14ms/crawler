@@ -1,18 +1,8 @@
 import sys, os
 import time, datetime
 
-from webdriver import pause_video, scroll_down
+from webdriver import pause_video, scroll_down, parse_selector
 from utils import pad_spaces, save_text_list
-from selenium.webdriver.common.by import By
-
-
-def parse_selector(selector):
-    if selector.startswith('.'):
-        return (By.CLASS_NAME, selector[1:])
-    elif selector.startswith('#'):
-        return (By.ID, selector[1:])
-    else:
-        return (By.TAG_NAME, selector)
 
 
 def get_video_titles_URLs(driver, selector_video_block, URL):
@@ -42,7 +32,7 @@ def get_video_titles_URLs(driver, selector_video_block, URL):
     return URLs, titles
 
 
-def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=None, n_scroll_down=500, start_time=None, skip_video_until_n_comment=0):
+def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=None, max_comments_per_video=500, start_time=None, skip_video_until_n_comment=0):
     """링크에 하나씩 들어가 유튜브 댓글 크롤링하기"""
 
     print("0 | 댓글 수 | 동영상 제목")
@@ -66,7 +56,7 @@ def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=Non
         
         # 댓글 수집한 동영상 목록에 있던 url이면 건너뛰기
         if cmts_already_saved_urls!=None and url in cmts_already_saved_urls:
-            sys.stdout.write(pad_spaces("\r{0} | 완료 | {1}\n".format(i+1, titles[i])))
+            sys.stdout.write(pad_spaces("\r{0} | 완료 | {1}".format(i+1, titles[i]))+'\n')
             sys.stdout.flush()
             continue
 
@@ -77,7 +67,8 @@ def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=Non
         
         # 동영상 일시정지, 스크롤 내리기 반복
         pause_video(driver)
-        scroll_down(driver, n_scroll_down, start_time, finish_text="댓글 수집 중...")
+        scroll_down(driver, start_time, finish_text="댓글 수집 중...", 
+                   selector_to_count=parse_selector(selector_comment), max_elements=max_comments_per_video)
 
         # 댓글들 가져오기
         if parse_selector(selector_comment)[1] not in driver.page_source:
@@ -86,12 +77,17 @@ def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=Non
             comment_blocks = driver.find_elements(*parse_selector(selector_comment))
     
         if len(comment_blocks) < skip_video_until_n_comment:
-            sys.stdout.write(pad_spaces("\r{0} | 스킵 | {1}\n".format(i+1, titles[i])))
+            sys.stdout.write(pad_spaces("\r{0} | 스킵 | {1}".format(i+1, titles[i]))+'\n')
             sys.stdout.flush()
             continue
 
         # txt파일로 댓글 저장
         comments = list(map(lambda cmt: cmt.text, comment_blocks))
+        
+        # Limit comments to max_comments_per_video to prevent exceeding the limit
+        if len(comments) > max_comments_per_video:
+            comments = comments[:max_comments_per_video]
+
         n_comment_saved = save_text_list(save_path, comments)
 
         # 댓글 수집한 동영상 목록에 현재 url추가
@@ -100,7 +96,7 @@ def crawl_youtube_comments(driver, urls, titles, selector_comment, save_path=Non
 
         saved_cmts_num += n_comment_saved
     
-        sys.stdout.write(pad_spaces("\r{0} | {1}개 | {2}\n".format(i+1, len(comments), titles[i])))
+        sys.stdout.write(pad_spaces("\r{0} | {1}개 | {2}".format(i+1, len(comments), titles[i]))+'\n')
         sys.stdout.flush()
     
     print('\n수집한 댓글 수: %d개'% saved_cmts_num)
