@@ -1,17 +1,40 @@
 import sys
 import os
 import time, datetime
+from selenium.webdriver.common.by import By
 
-from .webdriver import pause_video, scroll_down, parse_selector
-from .utils import pad_spaces, save_text_list
+try:
+    from .webdriver import pause_video, scroll_down, parse_selector
+    from .utils import pad_spaces, save_text_list
+except:
+    from webdriver import pause_video, scroll_down, parse_selector
+    from utils import pad_spaces, save_text_list
 
 
-def get_video_titles_URLs(driver, selector_video_block, URL):
+def change_location_on_youtube(driver, location="South Korea"):
+  driver.find_element(By.XPATH, '//*[@id="button"]/a').click()
+  driver.implicitly_wait(1)
+
+  soup = driver.find_element(By.ID, 'contentWrapper').find_element(By.ID, 'sections').find_elements(By.TAG_NAME, 'a')
+  els = list(filter(lambda el: '위치' in el.get_attribute('innerHTML') or 'Location' in el.get_attribute('innerHTML'), soup))
+  els[0].click()
+  driver.implicitly_wait(1)
+
+  els = driver.find_element(By.ID, 'contentWrapper').find_element(By.ID, 'submenu').find_elements(By.TAG_NAME, 'a')
+  els = list(filter(lambda el: location in el.get_attribute('innerHTML'), els))
+  els[0].click()
+  driver.implicitly_wait(1)
+
+  return driver
+
+
+def get_video_titles_URLs(driver, selector_video_block, URL, location="South Korea"):
     """URL에 접속하면 있는 모든 동영상의 제목과 링크 가져오기"""
     
     # 웹 사이트 가져오기
     driver.get(URL)
     driver.implicitly_wait(10)
+    change_location_on_youtube(driver, location)
 
     # 동영상 제목과 URL 모두 가져오기
     videos = driver.find_elements(*parse_selector(selector_video_block))
